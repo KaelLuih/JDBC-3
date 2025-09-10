@@ -26,6 +26,9 @@ public class Executar {
                 case 2:{
 
                 }
+                case 15:{
+                    //Aplicar rollback
+                }
 
             }
         }

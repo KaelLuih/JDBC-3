@@ -1,5 +1,6 @@
 package org.example.app;
 
+import org.example.controller.Executar;
 import org.example.service.Gerenciamento;
 import org.example.view.Menu;
 
@@ -9,6 +10,6 @@ import java.util.Scanner;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-
+        new Executar().ExecutarSistema();
     }
 }

@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class Conexao {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/Aula1?useSSL=false&serverTimezone=UTC";
+    private static final String URL = "jdbc:mysql://localhost:3306/Sistema_De_Logistica?useSSL=false&serverTimezone=UTC";
     private static final String USER = "root";
     private static final String SENHA = "mysqlPW";
 
