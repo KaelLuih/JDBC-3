@@ -7,23 +7,22 @@ public class Entrega {
     private int id ;
     private int pedido_id;
     private int motorista_id;
-    private Date data_saida;
+    private Date dataSaida;
     private Date data_entrega;
     private StatusEntrega status;
 
     public Entrega(int pedido_id, int motorista_id, Date data_saida) {
         this.pedido_id = pedido_id;
         this.motorista_id = motorista_id;
-        this.data_saida = data_saida;
-        this.status = StatusEntrega.EM_ROTA; // Status padrão
+        this.dataSaida = data_saida;
+        this.status = StatusEntrega.EM_ROTA;
     }
 
-    public Entrega(int id, int pedido_id, int motorista_id, Date data_saida, Date data_entrega, StatusEntrega status) {
+    public Entrega(int id, int pedido_id, int motorista_id, Date dataSaida, StatusEntrega status) {
         this.id = id;
         this.pedido_id = pedido_id;
         this.motorista_id = motorista_id;
-        this.data_saida = data_saida;
-        this.data_entrega = data_entrega;
+        this.dataSaida = dataSaida;
         this.status = status;
     }
 
@@ -52,11 +51,11 @@ public class Entrega {
     }
 
     public Date getData_saida() {
-        return data_saida;
+        return dataSaida;
     }
 
     public void setData_saida(Date data_saida) {
-        this.data_saida = data_saida;
+        this.dataSaida = data_saida;
     }
 
     public Date getData_entrega() {

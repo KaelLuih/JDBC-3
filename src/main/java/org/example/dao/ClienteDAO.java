@@ -41,7 +41,7 @@ public class ClienteDAO {
         String query = "SELECT c.nome, COUNT(e.id) AS total_entregas " +
                 "FROM cliente c " +
                 "JOIN pedido p ON c.id = p.id_cliente " +
-                "JOIN entrega e ON p.id = e.pedido_id " +
+                "JOIN Entrega e ON p.id = e.pedido_id " +
                 "GROUP BY c.id, c.nome " +
                 "ORDER BY total_entregas DESC";
 
@@ -54,7 +54,7 @@ public class ClienteDAO {
             while (rs.next()) {
                 String nome = rs.getString("nome");
                 int total = rs.getInt("total_entregas");
-                resultado.add(nome + "-" + "total " + "Entregas");
+                resultado.add("nome:" +nome + " - " + "total: " + total + " De Entregas Recebidas  ");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -64,11 +64,11 @@ public class ClienteDAO {
     }
 
     public Map<String, Integer> PedidosPEndentesPorEstado() {
-        String query = "SELECT c.estado , COUNT(p.id) AS total" +
-                "FROM cliente c  " +
-                "JOIN pedido p ON c.id = p.id_cliente" +
-                "WHERE p.status = 'PENDENTE" +
-                "GROUP BY c.estado" +
+        String query = "SELECT c.estado, COUNT(p.id) AS total " +
+                "FROM cliente c " +
+                "JOIN pedido p ON c.id = p.id_cliente " +
+                "WHERE p.status = 'PENDENTE' " +
+                "GROUP BY c.estado " +
                 "ORDER BY total DESC";
 
         Map<String, Integer> relatorio = new LinkedHashMap<>();
@@ -79,7 +79,7 @@ public class ClienteDAO {
             while (rs.next()) {
                 String estado = rs.getString("estado");
                 int total = rs.getInt("total");
-                relatorio.put(estado, total);
+                relatorio.put("Estado:" + estado ,   total );
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -87,53 +87,61 @@ public class ClienteDAO {
         return relatorio;
     }
 
-    public List<Cliente> DeletarCliente(int idCLiente) {
+    public boolean DeletarCliente(int idCLiente) {
         String query = "DELETE FROM cliente " +
                 "WHERE id = ?";
 
 
-        try (Connection conn = Conexao.conectar();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setInt(1, idCLiente);
-            stmt.executeUpdate();
 
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-//Aplicar rollback
-        }
-        return null;
-    }
+        try (Connection conn = Conexao.conectar()) {
+            conn.setAutoCommit(false);
 
-
-    public boolean TemPedido(int idCliente) {
-
-        String query = "SELECT e.id" +
-                "FROM Entrega e" +
-                "INNER JOIN pedido p ON e.pedido_id = p.id" +
-                "WHERE p.id_cliente = ? ";
-
-        try (Connection conn = Conexao.conectar();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-
-            stmt.setInt(1, idCliente);
-            ResultSet rs = stmt.executeQuery();
-
-
-            if (rs.next()) {
-                return true;
-            } else {
-                System.out.println("Usuario possui alfuma entrega cadastrada");
+            if(temPedido(conn,idCLiente)){
+                System.out.println("Clientes tem alguma entrega vinculada não é possivel realizar a ação");
+                conn.rollback();
                 return false;
+            }
+
+            try(PreparedStatement stmt = conn.prepareStatement(query)){
+                stmt.setInt(1,idCLiente);
+                int verificacao = stmt.executeUpdate();
+
+                if(verificacao > 0){
+                    conn.commit();
+                    System.out.println("Cliente deletado com sucesso");
+                    return true;
+                }else {
+                    conn.rollback();
+                    System.out.println("Cliente não encontrado");
+                    return false;
+                }
 
 
             }
 
+
+
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
+
         }
-//Aplicar rollback
-        return false;
+
+    }
+
+    public boolean temPedido(Connection conn, int idCliente) throws SQLException {
+        String query = "SELECT e.id " +
+                "FROM Entrega e " +
+                "INNER JOIN pedido p ON e.pedido_id = p.id " +
+                "WHERE p.id_cliente = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, idCliente);
+            ResultSet rs = stmt.executeQuery();
+
+            return rs.next();
+        }
     }
 
 

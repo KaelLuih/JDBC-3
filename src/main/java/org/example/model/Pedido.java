@@ -11,16 +11,16 @@ private String volume_m3;
 private String peso_kg;
 private  Status status;
 
-    public Pedido(int id, java.sql.Date datapedido, String volume, String peso, String status) {
-        this.id = this.id;
-        this.id_cliente = id_cliente;
+    public Pedido(int id, Date data_pedido, String volume_m3, String peso_kg, String status) {
+        this.id = id;
         this.data_pedido = data_pedido;
         this.volume_m3 = volume_m3;
         this.peso_kg = peso_kg;
-        this.status = this.status;
+        this.status = Status.valueOf(status);
     }
 
-    public Pedido(Date data_pedido, String volume_m3, String peso_kg, Status status) {
+    public Pedido(int id_cliente, Date data_pedido, String volume_m3, String peso_kg, Status status) {
+        this.id_cliente = id_cliente;
         this.data_pedido = data_pedido;
         this.volume_m3 = volume_m3;
         this.peso_kg = peso_kg;

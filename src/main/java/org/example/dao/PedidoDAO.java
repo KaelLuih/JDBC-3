@@ -1,12 +1,12 @@
 package org.example.dao;
 
 import org.example.model.Pedido;
+import org.example.model.Status;
 import org.example.util.Conexao;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class PedidoDAO {
 
@@ -38,36 +38,35 @@ public class PedidoDAO {
 
     }
 
-    public static List<Pedido> BuscarPedidoPorCpfCnpj(String cpfcnpj)  {
+    public static List<Pedido> BuscarPedidoPorCpfCnpj(String cpfcnpj) {
         List<Pedido> pedidos = new ArrayList<>();
 
-        String query = "SELECT p.id, p.data_pedido,c.nome,c.cpf_cnpj" +
-                "FROM pedido p" +
-                "INNER JOIN cliente c ON p.id_cliente =c.id" +
+        String query = "SELECT p.id, p.data_pedido, p.volume_m3, p.peso_kg, p.status " +
+                "FROM pedido p " +
+                "INNER JOIN cliente c ON p.id_cliente = c.id " +
                 "WHERE c.cpf_cnpj = ?";
 
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
 
-        try(Connection conn = Conexao.conectar();
-        PreparedStatement stmt = conn.prepareStatement(query)){
-
-stmt.setString(1,cpfcnpj);
+            stmt.setString(1, cpfcnpj);
             ResultSet rs = stmt.executeQuery();
 
-            while(rs.next()){
-
+            while (rs.next()) {
                 int id = rs.getInt("id");
-                Date datapedido = rs.getDate("data_pedido");
+                Date dataPedido = rs.getDate("data_pedido");
                 String volume = rs.getString("volume_m3");
                 String peso = rs.getString("peso_kg");
                 String status = rs.getString("status");
 
-                var pedido = new Pedido(id,datapedido,volume,peso,status);
+                Pedido pedido = new Pedido(id, dataPedido, volume, peso,  status);
                 pedidos.add(pedido);
             }
 
-        }catch (SQLException e ){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return pedidos;
     }
     public void CancelarPedido(int idPedido){

@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Menu {
 static Scanner input = new Scanner(System.in);
-    public static int MenuPrincipal(){
+    public static int MenuPrincipal() {
         System.out.println("""
                 1 - Cadastrar Cliente
                 2 - Cadastrar Motorista
@@ -25,6 +25,10 @@ static Scanner input = new Scanner(System.in);
                 0 - Sair""");
         int escolha = input.nextInt();
         return escolha;
-    }
 
+
+    }
+    public static void MensagemDeSucesso(){
+        System.out.println("atualizado com sucesso");
+    }
 }
