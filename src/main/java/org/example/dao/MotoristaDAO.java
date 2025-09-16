@@ -47,40 +47,42 @@ public class MotoristaDAO {
         return 0;
     }
 
-    public boolean possuiEntregas(Connection conn , int idMotorista) throws SQLException {
-        String query = "SELECT e.id" +
-                "FROM Entrega e" +
-                "WHERE e.motorista_id = ?";
+    public boolean possuiEntregas(Connection conn, int idMotorista) throws SQLException {
+        String query = """
+                SELECT *
+                FROM Entrega e
+                WHERE e.motorista_id = ?
+                """;
 
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
-stmt.setInt(1,idMotorista);
-ResultSet rs = stmt.executeQuery();
-return rs.next();
+            stmt.setInt(1, idMotorista);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
 
         }
     }
 
-    public boolean DeletarMotorista(int idMotorista)throws SQLException{
+    public boolean DeletarMotorista(int idMotorista) throws SQLException {
         String query = "DELETE FROM Motorista WHERE id = ?  ";
 
-        try(Connection conn = Conexao.conectar()){
+        try (Connection conn = Conexao.conectar()) {
             conn.setAutoCommit(false);
 
-            if (possuiEntregas(conn,idMotorista)){
+            if (possuiEntregas(conn, idMotorista)) {
                 System.out.println("Motorista possui entregas");
                 conn.rollback();
                 return false;
             }
 
-            try(PreparedStatement stmt = conn.prepareStatement(query)){
-                stmt.setInt(1,idMotorista);
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setInt(1, idMotorista);
                 int validacao = stmt.executeUpdate();
 
-                if (validacao>0){
+                if (validacao > 0) {
                     conn.commit();
                     System.out.println("Motorista excluido com sucesso");
                     return true;
-                }else {
+                } else {
                     conn.rollback();
                     System.out.println("Item não encontrado");
                     return false;
@@ -93,7 +95,6 @@ return rs.next();
         }
 
     }
-
 
 
 }
