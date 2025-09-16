@@ -70,7 +70,7 @@ public class PedidoDAO {
         return pedidos;
     }
     public void CancelarPedido(int idPedido){
-        String query = "UPDATE pedido SET STATUS = 'CANCELADO WHERE id =?";
+        String query = "UPDATE pedido SET STATUS = 'CANCELADO' WHERE id =?";
 
         try(Connection conn = Conexao.conectar();
         PreparedStatement stmt = conn.prepareStatement(query)){

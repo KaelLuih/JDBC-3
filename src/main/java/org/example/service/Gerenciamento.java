@@ -160,9 +160,10 @@ public class Gerenciamento {
 
     public static void listarEntregaClienteMotorista() {
         var dao = new EntregaDAO();
-      dao.LIstarEntregaCLienteMotorista();
-        }
-        public static void TotalEntregas(){
+        dao.LIstarEntregaCLienteMotorista();
+    }
+
+    public static void TotalEntregas() {
         System.out.println("Digite o id do motorista");
         int id_motorista = input.nextInt();
         input.nextLine();
@@ -170,51 +171,84 @@ public class Gerenciamento {
         var dao = new MotoristaDAO();
 
         try {
-           int total = dao.TotalEntregas(id_motorista);
+            int total = dao.TotalEntregas(id_motorista);
             System.out.println("O total do motorista" + id_motorista + "é de :" + total);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
 
+    }
 
-        }
-
-        public static void ClientesMaiorVolume(){
+    public static void ClientesMaiorVolume() {
         var dao = new ClienteDAO();
 
-        List <String> resultado = dao.clientescommaiorEntregas();
-
-            System.out.println(resultado);
-
-
-        }
-        public static void PedidosPEndentes(){
-        var dao = new ClienteDAO();
-            Map<String, Integer> resultado = dao.PedidosPEndentesPorEstado();
-
-            System.out.println(resultado);
-        }
-public static void EntregasAtrasadas(){
-        var dao = new EntregaDAO();
-        Map<String,Integer> resultado = dao.AtrasadasPorCidade();
+        List<String> resultado = dao.clientescommaiorEntregas();
 
         System.out.println(resultado);
-}
 
-    public static void BuscarCpf(){
+
+    }
+
+    public static void PedidosPEndentes() {
+        var dao = new ClienteDAO();
+        Map<String, Integer> resultado = dao.PedidosPEndentesPorEstado();
+
+        System.out.println(resultado);
+    }
+
+    public static void EntregasAtrasadas() {
+        var dao = new EntregaDAO();
+        Map<String, Integer> resultado = dao.AtrasadasPorCidade();
+
+        System.out.println(resultado);
+    }
+
+    public static void BuscarCpf() {
 
         System.out.println("Digite o cpf ou o cnpj");
         String cpf_cnpj = input.nextLine();
 
 
         var dao = new PedidoDAO();
-List<Pedido> resultado = dao.BuscarPedidoPorCpfCnpj(cpf_cnpj);
+        List<Pedido> resultado = dao.BuscarPedidoPorCpfCnpj(cpf_cnpj);
 
         System.out.println(resultado);
 
     }
 
+    public static void cancelarPedido(){
+        System.out.println("Digite o id do pedido que deseja cancelar ");
+        int id = input.nextInt();
+
+        var dao = new PedidoDAO();
+        dao.CancelarPedido(id);
     }
+
+    public static void ExcluirEntrega(){
+        System.out.println("Digite o id da entrega que deseja excluir");
+   int id = input.nextInt();
+
+   var dao = new EntregaDAO();
+   dao.DeletarEntrega(id);
+    }
+
+    public static void ExcluirMotorista() throws SQLException {
+        System.out.println("Digite o id do motorista que deseja excluir");
+        int id = input.nextInt();
+
+        var dao = new MotoristaDAO();
+        dao.DeletarMotorista(id);
+    }
+
+    public static void ExcluirCliente()throws SQLException {
+        System.out.println("Digite o id do Cliente que deseja excluir");
+        int id = input.nextInt();
+
+        var dao = new ClienteDAO();
+        dao.DeletarCliente(id);
+    }
+
+}
 
 
